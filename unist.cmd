@@ -1,0 +1,1 @@
+rd /s /q %~dp0\node_modules
