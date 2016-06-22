@@ -1,1 +1,0 @@
-@ node red.js --userDir %~dp0 -v
