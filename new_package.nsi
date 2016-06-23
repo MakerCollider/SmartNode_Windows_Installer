@@ -14,7 +14,7 @@
 
 ; MUI Settings
 !define MUI_ABORTWARNING
-!define MUI_ICON "${NSISDIR}\Contrib\Graphics\Icons\modern-install.ico"
+!define MUI_ICON "logo.ico"
 !define MUI_UNICON "${NSISDIR}\Contrib\Graphics\Icons\modern-uninstall.ico"
 
 ; Language Selection Dialog Settings
@@ -32,7 +32,6 @@
 !insertmacro MUI_PAGE_INSTFILES
 ; Finish page
 !define MUI_FINISHPAGE_RUN "$INSTDIR\SmartNode.cmd"
-#!define MUI_FINISHPAGE_RUN_PARAMETERS "$TT\node-red\red.js --userDir $TT\node-red -v"
 
 !insertmacro MUI_PAGE_FINISH
 
@@ -48,10 +47,11 @@
 
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
 OutFile "SmatNode.exe"
-InstallDir "$PROGRAMFILES\SmartNode"
+InstallDir "$LOCALAPPDATA\SmartNode"
 InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
 ShowInstDetails show
 ShowUnInstDetails show
+BrandingText "MakerCollider@2016"
 
 Function .onInit
   !insertmacro MUI_LANGDLL_DISPLAY
@@ -65,13 +65,15 @@ Section "MainSection" SEC01
   ExecWait "$INSTDIR\after_install.cmd"
   Delete "$INSTDIR\after_install.cmd"
   CreateDirectory "$SMPROGRAMS\SmartNode"
-  CreateShortCut "$SMPROGRAMS\SmartNode\SmartNode.lnk" "$INSTDIR\SmartNode.cmd"
-  CreateShortCut "$DESKTOP\SmartNode.lnk" "$INSTDIR\SmartNode.cmd"
+  CreateShortCut "$SMPROGRAMS\SmartNode\SmartNode.lnk" "$INSTDIR\SmartNode.cmd" "" "$INSTDIR\logo.ico" 0
+  CreateShortCut "$DESKTOP\SmartNode.lnk" "$INSTDIR\SmartNode.cmd" "" "$INSTDIR\logo.ico" 0
 SectionEnd
 
 Section -AdditionalIcons
-  WriteIniStr "$INSTDIR\${PRODUCT_NAME}.url" "InternetShortcut" "URL" "${PRODUCT_WEB_SITE}"
-  CreateShortCut "$SMPROGRAMS\SmartNode\Website.lnk" "$INSTDIR\${PRODUCT_NAME}.url"
+  WriteIniStr "$INSTDIR\Homepage.url" "InternetShortcut" "URL" "${PRODUCT_WEB_SITE}"
+  WriteINIStr "$INSTDIR\Homepage.url" "InternetShortcut" "IconFile" "$INSTDIR\website_logo.ico"
+  WriteINIStr "$INSTDIR\Homepage.url" "InternetShortcut" "IconIndex" "0"
+  CreateShortCut "$SMPROGRAMS\SmartNode\Homepage.lnk" "$INSTDIR\Homepage.url" "" "$INSTDIR\website_logo.ico" 0
   CreateShortCut "$SMPROGRAMS\SmartNode\Uninstall.lnk" "$INSTDIR\uninst.exe"
 SectionEnd
 
